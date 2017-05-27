@@ -7,17 +7,19 @@ package pck_pdist_fact_conta.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Factura.findAll", query = "SELECT f FROM Factura f")
     , @NamedQuery(name = "Factura.findByFacNumero", query = "SELECT f FROM Factura f WHERE f.facNumero = :facNumero")
+    , @NamedQuery(name = "Factura.findByCiuCodigo", query = "SELECT f FROM Factura f WHERE f.ciuCodigo = :ciuCodigo")
     , @NamedQuery(name = "Factura.findByFacFecha", query = "SELECT f FROM Factura f WHERE f.facFecha = :facFecha")})
 public class Factura implements Serializable {
 
@@ -47,11 +50,18 @@ public class Factura implements Serializable {
     private BigDecimal facNumero;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "CIU_CODIGO")
+    private BigInteger ciuCodigo;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "FAC_FECHA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date facFecha;
-    @ManyToMany(mappedBy = "facturaList")
-    private List<Articulos> articulosList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura")
+    private List<FactDetalle> factDetalleList;
+    @JoinColumn(name = "CIU_CIU_CODIGO", referencedColumnName = "CIU_CODIGO")
+    @ManyToOne
+    private CiudadEntrega ciuCiuCodigo;
     @JoinColumn(name = "CLI_RUC", referencedColumnName = "CLI_RUC")
     @ManyToOne(optional = false)
     private Cliente cliRuc;
@@ -63,8 +73,9 @@ public class Factura implements Serializable {
         this.facNumero = facNumero;
     }
 
-    public Factura(BigDecimal facNumero, Date facFecha) {
+    public Factura(BigDecimal facNumero, BigInteger ciuCodigo, Date facFecha) {
         this.facNumero = facNumero;
+        this.ciuCodigo = ciuCodigo;
         this.facFecha = facFecha;
     }
 
@@ -76,6 +87,14 @@ public class Factura implements Serializable {
         this.facNumero = facNumero;
     }
 
+    public BigInteger getCiuCodigo() {
+        return ciuCodigo;
+    }
+
+    public void setCiuCodigo(BigInteger ciuCodigo) {
+        this.ciuCodigo = ciuCodigo;
+    }
+
     public Date getFacFecha() {
         return facFecha;
     }
@@ -85,12 +104,20 @@ public class Factura implements Serializable {
     }
 
     @XmlTransient
-    public List<Articulos> getArticulosList() {
-        return articulosList;
+    public List<FactDetalle> getFactDetalleList() {
+        return factDetalleList;
     }
 
-    public void setArticulosList(List<Articulos> articulosList) {
-        this.articulosList = articulosList;
+    public void setFactDetalleList(List<FactDetalle> factDetalleList) {
+        this.factDetalleList = factDetalleList;
+    }
+
+    public CiudadEntrega getCiuCiuCodigo() {
+        return ciuCiuCodigo;
+    }
+
+    public void setCiuCiuCodigo(CiudadEntrega ciuCiuCodigo) {
+        this.ciuCiuCodigo = ciuCiuCodigo;
     }
 
     public Cliente getCliRuc() {
@@ -123,7 +150,7 @@ public class Factura implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.Factura[ facNumero=" + facNumero + " ]";
+        return "pck_pdist_fact_conta.entidades.Factura[ facNumero=" + facNumero + " ]";
     }
     
 }

@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -47,8 +46,8 @@ public class CiudadEntrega implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "CIU_NOMBRE")
     private String ciuNombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ciuCodigo")
-    private List<Cliente> clienteList;
+    @OneToMany(mappedBy = "ciuCiuCodigo")
+    private List<Factura> facturaList;
 
     public CiudadEntrega() {
     }
@@ -79,12 +78,12 @@ public class CiudadEntrega implements Serializable {
     }
 
     @XmlTransient
-    public List<Cliente> getClienteList() {
-        return clienteList;
+    public List<Factura> getFacturaList() {
+        return facturaList;
     }
 
-    public void setClienteList(List<Cliente> clienteList) {
-        this.clienteList = clienteList;
+    public void setFacturaList(List<Factura> facturaList) {
+        this.facturaList = facturaList;
     }
 
     @Override
@@ -109,7 +108,7 @@ public class CiudadEntrega implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.CiudadEntrega[ ciuCodigo=" + ciuCodigo + " ]";
+        return "pck_pdist_fact_conta.entidades.CiudadEntrega[ ciuCodigo=" + ciuCodigo + " ]";
     }
     
 }

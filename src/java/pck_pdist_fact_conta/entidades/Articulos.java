@@ -7,17 +7,15 @@ package pck_pdist_fact_conta.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,7 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Articulos.findAll", query = "SELECT a FROM Articulos a")
     , @NamedQuery(name = "Articulos.findByArtCodigo", query = "SELECT a FROM Articulos a WHERE a.artCodigo = :artCodigo")
     , @NamedQuery(name = "Articulos.findByArtNombre", query = "SELECT a FROM Articulos a WHERE a.artNombre = :artNombre")
-    , @NamedQuery(name = "Articulos.findByArtCantidad", query = "SELECT a FROM Articulos a WHERE a.artCantidad = :artCantidad")
     , @NamedQuery(name = "Articulos.findByArtPrecio", query = "SELECT a FROM Articulos a WHERE a.artPrecio = :artPrecio")})
 public class Articulos implements Serializable {
 
@@ -53,17 +50,10 @@ public class Articulos implements Serializable {
     private String artNombre;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "ART_CANTIDAD")
-    private BigInteger artCantidad;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "ART_PRECIO")
     private double artPrecio;
-    @JoinTable(name = "FACT_ARTI", joinColumns = {
-        @JoinColumn(name = "ART_CODIGO", referencedColumnName = "ART_CODIGO")}, inverseJoinColumns = {
-        @JoinColumn(name = "FAC_NUMERO", referencedColumnName = "FAC_NUMERO")})
-    @ManyToMany
-    private List<Factura> facturaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulos")
+    private List<FactDetalle> factDetalleList;
 
     public Articulos() {
     }
@@ -72,10 +62,9 @@ public class Articulos implements Serializable {
         this.artCodigo = artCodigo;
     }
 
-    public Articulos(BigDecimal artCodigo, String artNombre, BigInteger artCantidad, double artPrecio) {
+    public Articulos(BigDecimal artCodigo, String artNombre, double artPrecio) {
         this.artCodigo = artCodigo;
         this.artNombre = artNombre;
-        this.artCantidad = artCantidad;
         this.artPrecio = artPrecio;
     }
 
@@ -95,14 +84,6 @@ public class Articulos implements Serializable {
         this.artNombre = artNombre;
     }
 
-    public BigInteger getArtCantidad() {
-        return artCantidad;
-    }
-
-    public void setArtCantidad(BigInteger artCantidad) {
-        this.artCantidad = artCantidad;
-    }
-
     public double getArtPrecio() {
         return artPrecio;
     }
@@ -112,12 +93,12 @@ public class Articulos implements Serializable {
     }
 
     @XmlTransient
-    public List<Factura> getFacturaList() {
-        return facturaList;
+    public List<FactDetalle> getFactDetalleList() {
+        return factDetalleList;
     }
 
-    public void setFacturaList(List<Factura> facturaList) {
-        this.facturaList = facturaList;
+    public void setFactDetalleList(List<FactDetalle> factDetalleList) {
+        this.factDetalleList = factDetalleList;
     }
 
     @Override
@@ -142,7 +123,7 @@ public class Articulos implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.Articulos[ artCodigo=" + artCodigo + " ]";
+        return "pck_pdist_fact_conta.entidades.Articulos[ artCodigo=" + artCodigo + " ]";
     }
     
 }
