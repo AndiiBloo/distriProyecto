@@ -7,20 +7,18 @@ package pck_pdist_fact_conta.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -52,8 +50,9 @@ public class Articulos implements Serializable {
     @NotNull
     @Column(name = "ART_PRECIO")
     private double artPrecio;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulos")
-    private List<FactDetalle> factDetalleList;
+    @JoinColumn(name = "FAC_NUMERO", referencedColumnName = "FAC_NUMERO")
+    @ManyToOne(optional = false)
+    private Factura facNumero;
 
     public Articulos() {
     }
@@ -92,13 +91,12 @@ public class Articulos implements Serializable {
         this.artPrecio = artPrecio;
     }
 
-    @XmlTransient
-    public List<FactDetalle> getFactDetalleList() {
-        return factDetalleList;
+    public Factura getFacNumero() {
+        return facNumero;
     }
 
-    public void setFactDetalleList(List<FactDetalle> factDetalleList) {
-        this.factDetalleList = factDetalleList;
+    public void setFacNumero(Factura facNumero) {
+        this.facNumero = facNumero;
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -46,7 +47,7 @@ public class CiudadEntrega implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "CIU_NOMBRE")
     private String ciuNombre;
-    @OneToMany(mappedBy = "ciuCiuCodigo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ciuCodigo")
     private List<Factura> facturaList;
 
     public CiudadEntrega() {
