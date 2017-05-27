@@ -7,8 +7,8 @@ package pck_pdist_fact_conta.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Marco Rodriguez
+ * @author Andrés López
  */
 @Entity
 @Table(name = "COMPROBANTECONTABILIDAD")
@@ -53,7 +53,7 @@ public class Comprobantecontabilidad implements Serializable {
     @Column(name = "COM_OBSERVACIONES")
     private String comObservaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "comprobantecontabilidad")
-    private Collection<Detallecomprobantecontabilidad> detallecomprobantecontabilidadCollection;
+    private List<Detallecomprobantecontabilidad> detallecomprobantecontabilidadList;
 
     public Comprobantecontabilidad() {
     }
@@ -87,12 +87,12 @@ public class Comprobantecontabilidad implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Detallecomprobantecontabilidad> getDetallecomprobantecontabilidadCollection() {
-        return detallecomprobantecontabilidadCollection;
+    public List<Detallecomprobantecontabilidad> getDetallecomprobantecontabilidadList() {
+        return detallecomprobantecontabilidadList;
     }
 
-    public void setDetallecomprobantecontabilidadCollection(Collection<Detallecomprobantecontabilidad> detallecomprobantecontabilidadCollection) {
-        this.detallecomprobantecontabilidadCollection = detallecomprobantecontabilidadCollection;
+    public void setDetallecomprobantecontabilidadList(List<Detallecomprobantecontabilidad> detallecomprobantecontabilidadList) {
+        this.detallecomprobantecontabilidadList = detallecomprobantecontabilidadList;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class Comprobantecontabilidad implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.Comprobantecontabilidad[ comNumero=" + comNumero + " ]";
+        return "pck_pdist_fact_conta.entidades.Comprobantecontabilidad[ comNumero=" + comNumero + " ]";
     }
     
 }

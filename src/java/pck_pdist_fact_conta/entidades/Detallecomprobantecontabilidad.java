@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Marco Rodriguez
+ * @author Andrés López
  */
 @Entity
 @Table(name = "DETALLECOMPROBANTECONTABILIDAD")
@@ -120,7 +120,7 @@ public class Detallecomprobantecontabilidad implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.Detallecomprobantecontabilidad[ detallecomprobantecontabilidadPK=" + detallecomprobantecontabilidadPK + " ]";
+        return "pck_pdist_fact_conta.entidades.Detallecomprobantecontabilidad[ detallecomprobantecontabilidadPK=" + detallecomprobantecontabilidadPK + " ]";
     }
     
 }

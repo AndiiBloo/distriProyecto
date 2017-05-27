@@ -21,6 +21,10 @@ public class FactDetallePK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
+    @Column(name = "FACDET_CODIGO")
+    private BigInteger facdetCodigo;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "FAC_NUMERO")
     private BigInteger facNumero;
     @Basic(optional = false)
@@ -31,9 +35,18 @@ public class FactDetallePK implements Serializable {
     public FactDetallePK() {
     }
 
-    public FactDetallePK(BigInteger facNumero, BigInteger artCodigo) {
+    public FactDetallePK(BigInteger facdetCodigo, BigInteger facNumero, BigInteger artCodigo) {
+        this.facdetCodigo = facdetCodigo;
         this.facNumero = facNumero;
         this.artCodigo = artCodigo;
+    }
+
+    public BigInteger getFacdetCodigo() {
+        return facdetCodigo;
+    }
+
+    public void setFacdetCodigo(BigInteger facdetCodigo) {
+        this.facdetCodigo = facdetCodigo;
     }
 
     public BigInteger getFacNumero() {
@@ -55,6 +68,7 @@ public class FactDetallePK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
+        hash += (facdetCodigo != null ? facdetCodigo.hashCode() : 0);
         hash += (facNumero != null ? facNumero.hashCode() : 0);
         hash += (artCodigo != null ? artCodigo.hashCode() : 0);
         return hash;
@@ -67,6 +81,9 @@ public class FactDetallePK implements Serializable {
             return false;
         }
         FactDetallePK other = (FactDetallePK) object;
+        if ((this.facdetCodigo == null && other.facdetCodigo != null) || (this.facdetCodigo != null && !this.facdetCodigo.equals(other.facdetCodigo))) {
+            return false;
+        }
         if ((this.facNumero == null && other.facNumero != null) || (this.facNumero != null && !this.facNumero.equals(other.facNumero))) {
             return false;
         }
@@ -78,7 +95,7 @@ public class FactDetallePK implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.entidades.FactDetallePK[ facNumero=" + facNumero + ", artCodigo=" + artCodigo + " ]";
+        return "pck_pdist_fact_conta.entidades.FactDetallePK[ facdetCodigo=" + facdetCodigo + ", facNumero=" + facNumero + ", artCodigo=" + artCodigo + " ]";
     }
     
 }

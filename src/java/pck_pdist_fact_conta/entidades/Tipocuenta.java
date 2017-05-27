@@ -7,7 +7,7 @@ package pck_pdist_fact_conta.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Marco Rodriguez
+ * @author Andrés López
  */
 @Entity
 @Table(name = "TIPOCUENTA")
@@ -46,7 +46,7 @@ public class Tipocuenta implements Serializable {
     @Column(name = "TDC_NOMBRE")
     private String tdcNombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tdcCodigo")
-    private Collection<Cuenta> cuentaCollection;
+    private List<Cuenta> cuentaList;
 
     public Tipocuenta() {
     }
@@ -72,12 +72,12 @@ public class Tipocuenta implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Cuenta> getCuentaCollection() {
-        return cuentaCollection;
+    public List<Cuenta> getCuentaList() {
+        return cuentaList;
     }
 
-    public void setCuentaCollection(Collection<Cuenta> cuentaCollection) {
-        this.cuentaCollection = cuentaCollection;
+    public void setCuentaList(List<Cuenta> cuentaList) {
+        this.cuentaList = cuentaList;
     }
 
     @Override

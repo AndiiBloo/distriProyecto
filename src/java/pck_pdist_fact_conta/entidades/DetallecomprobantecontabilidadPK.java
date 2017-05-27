@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Marco Rodriguez
+ * @author Andrés López
  */
 @Embeddable
 public class DetallecomprobantecontabilidadPK implements Serializable {
@@ -78,7 +78,7 @@ public class DetallecomprobantecontabilidadPK implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.DetallecomprobantecontabilidadPK[ comNumero=" + comNumero + ", cueCodigo=" + cueCodigo + " ]";
+        return "pck_pdist_fact_conta.entidades.DetallecomprobantecontabilidadPK[ comNumero=" + comNumero + ", cueCodigo=" + cueCodigo + " ]";
     }
     
 }

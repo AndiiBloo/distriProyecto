@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Marco Rodriguez
+ * @author Andrés López
  */
 @Entity
 @Table(name = "CUENTA")
@@ -36,9 +36,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Cuenta.findByCueCodigo", query = "SELECT c FROM Cuenta c WHERE c.cueCodigo = :cueCodigo")
     , @NamedQuery(name = "Cuenta.findByCueNombre", query = "SELECT c FROM Cuenta c WHERE c.cueNombre = :cueNombre")})
 public class Cuenta implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuenta")
-    private List<Detallecomprobantecontabilidad> detallecomprobantecontabilidadList;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -53,6 +50,8 @@ public class Cuenta implements Serializable {
     @JoinColumn(name = "TDC_CODIGO", referencedColumnName = "TDC_CODIGO")
     @ManyToOne(optional = false)
     private Tipocuenta tdcCodigo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuenta")
+    private List<Detallecomprobantecontabilidad> detallecomprobantecontabilidadList;
 
     public Cuenta() {
     }
@@ -85,6 +84,15 @@ public class Cuenta implements Serializable {
         this.tdcCodigo = tdcCodigo;
     }
 
+    @XmlTransient
+    public List<Detallecomprobantecontabilidad> getDetallecomprobantecontabilidadList() {
+        return detallecomprobantecontabilidadList;
+    }
+
+    public void setDetallecomprobantecontabilidadList(List<Detallecomprobantecontabilidad> detallecomprobantecontabilidadList) {
+        this.detallecomprobantecontabilidadList = detallecomprobantecontabilidadList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -108,15 +116,6 @@ public class Cuenta implements Serializable {
     @Override
     public String toString() {
         return "pck_pdist_fact_conta.entidades.Cuenta[ cueCodigo=" + cueCodigo + " ]";
-    }
-
-    @XmlTransient
-    public List<Detallecomprobantecontabilidad> getDetallecomprobantecontabilidadList() {
-        return detallecomprobantecontabilidadList;
-    }
-
-    public void setDetallecomprobantecontabilidadList(List<Detallecomprobantecontabilidad> detallecomprobantecontabilidadList) {
-        this.detallecomprobantecontabilidadList = detallecomprobantecontabilidadList;
     }
     
 }

@@ -12,8 +12,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -54,9 +52,6 @@ public class Cliente implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "CLI_DIRECCION")
     private String cliDireccion;
-    @JoinColumn(name = "CIU_CODIGO", referencedColumnName = "CIU_CODIGO")
-    @ManyToOne(optional = false)
-    private CiudadEntrega ciuCodigo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliRuc")
     private List<Factura> facturaList;
 
@@ -97,14 +92,6 @@ public class Cliente implements Serializable {
         this.cliDireccion = cliDireccion;
     }
 
-    public CiudadEntrega getCiuCodigo() {
-        return ciuCodigo;
-    }
-
-    public void setCiuCodigo(CiudadEntrega ciuCodigo) {
-        this.ciuCodigo = ciuCodigo;
-    }
-
     @XmlTransient
     public List<Factura> getFacturaList() {
         return facturaList;
@@ -136,7 +123,7 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.Cliente[ cliRuc=" + cliRuc + " ]";
+        return "pck_pdist_fact_conta.entidades.Cliente[ cliRuc=" + cliRuc + " ]";
     }
     
 }

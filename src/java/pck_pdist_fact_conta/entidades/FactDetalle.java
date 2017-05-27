@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FactDetalle.findAll", query = "SELECT f FROM FactDetalle f")
+    , @NamedQuery(name = "FactDetalle.findByFacdetCodigo", query = "SELECT f FROM FactDetalle f WHERE f.factDetallePK.facdetCodigo = :facdetCodigo")
     , @NamedQuery(name = "FactDetalle.findByFacNumero", query = "SELECT f FROM FactDetalle f WHERE f.factDetallePK.facNumero = :facNumero")
     , @NamedQuery(name = "FactDetalle.findByArtCodigo", query = "SELECT f FROM FactDetalle f WHERE f.factDetallePK.artCodigo = :artCodigo")
     , @NamedQuery(name = "FactDetalle.findByFacdetCantidad", query = "SELECT f FROM FactDetalle f WHERE f.facdetCantidad = :facdetCantidad")
@@ -41,9 +42,10 @@ public class FactDetalle implements Serializable {
     @NotNull
     @Column(name = "FACDET_CANTIDAD")
     private BigInteger facdetCantidad;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "FACDET_PRECIO")
-    private Double facdetPrecio;
+    private double facdetPrecio;
     @JoinColumn(name = "ART_CODIGO", referencedColumnName = "ART_CODIGO", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Articulos articulos;
@@ -58,13 +60,14 @@ public class FactDetalle implements Serializable {
         this.factDetallePK = factDetallePK;
     }
 
-    public FactDetalle(FactDetallePK factDetallePK, BigInteger facdetCantidad) {
+    public FactDetalle(FactDetallePK factDetallePK, BigInteger facdetCantidad, double facdetPrecio) {
         this.factDetallePK = factDetallePK;
         this.facdetCantidad = facdetCantidad;
+        this.facdetPrecio = facdetPrecio;
     }
 
-    public FactDetalle(BigInteger facNumero, BigInteger artCodigo) {
-        this.factDetallePK = new FactDetallePK(facNumero, artCodigo);
+    public FactDetalle(BigInteger facdetCodigo, BigInteger facNumero, BigInteger artCodigo) {
+        this.factDetallePK = new FactDetallePK(facdetCodigo, facNumero, artCodigo);
     }
 
     public FactDetallePK getFactDetallePK() {
@@ -83,11 +86,11 @@ public class FactDetalle implements Serializable {
         this.facdetCantidad = facdetCantidad;
     }
 
-    public Double getFacdetPrecio() {
+    public double getFacdetPrecio() {
         return facdetPrecio;
     }
 
-    public void setFacdetPrecio(Double facdetPrecio) {
+    public void setFacdetPrecio(double facdetPrecio) {
         this.facdetPrecio = facdetPrecio;
     }
 
