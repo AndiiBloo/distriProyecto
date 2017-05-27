@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pck_pdist_fact_conta;
 
 import java.io.IOException;
@@ -16,10 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author Andrés López
- */
 @WebServlet(name = "servlet_usuario", urlPatterns = {"/servlet_usuario"})
 public class servlet_usuario extends HttpServlet {
 
