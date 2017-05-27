@@ -7,6 +7,7 @@ package pck_pdist_fact_conta.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuarios.findAll", query = "SELECT u FROM Usuarios u")
     , @NamedQuery(name = "Usuarios.findByUsCodigo", query = "SELECT u FROM Usuarios u WHERE u.usCodigo = :usCodigo")
     , @NamedQuery(name = "Usuarios.findByUsNombre", query = "SELECT u FROM Usuarios u WHERE u.usNombre = :usNombre")
-    , @NamedQuery(name = "Usuarios.findByUsPassword", query = "SELECT u FROM Usuarios u WHERE u.usPassword = :usPassword")})
+    , @NamedQuery(name = "Usuarios.findByUsPassword", query = "SELECT u FROM Usuarios u WHERE u.usPassword = :usPassword")
+    , @NamedQuery(name = "Usuarios.findByUsRol", query = "SELECT u FROM Usuarios u WHERE u.usRol = :usRol")})
 public class Usuarios implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,6 +51,8 @@ public class Usuarios implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "US_PASSWORD")
     private String usPassword;
+    @Column(name = "US_ROL")
+    private BigInteger usRol;
 
     public Usuarios() {
     }
@@ -87,6 +91,14 @@ public class Usuarios implements Serializable {
         this.usPassword = usPassword;
     }
 
+    public BigInteger getUsRol() {
+        return usRol;
+    }
+
+    public void setUsRol(BigInteger usRol) {
+        this.usRol = usRol;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -109,7 +121,7 @@ public class Usuarios implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.Usuarios[ usCodigo=" + usCodigo + " ]";
+        return "pck_pdist_fact_conta.entidades.Usuarios[ usCodigo=" + usCodigo + " ]";
     }
     
 }

@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -45,22 +46,15 @@ public class servlet_usuario extends HttpServlet {
         if (boton!=null && boton!=""){
             if(boton.equals("Ingresar"))
             {
-                switch(nusu.buscar(nombre,password))
-                {
-                    case 1:
-                        response.sendRedirect("servlet_menufac");
-                        break;
-                    case 2:
-                        response.sendRedirect("servlet_menucont");
-                        break;
-                    case 3:
-                        response.sendRedirect("servlet_menu");
-                        break;
-                    default:
-                        msj = "Usuario o contraseña incorrectos";
-                        break;
-                }  
-                pantalla = mostrar_pantalla("","");                  
+                HttpSession session = request.getSession(true);
+                if(nusu.buscar(nombre,password) != null){
+                    session.setAttribute("usuario", nusu.buscar(nombre,password));
+                    response.sendRedirect("servlet_menu");
+                }
+                else{
+                    pantalla = mostrar_pantalla("","");
+                    msj="Usuario o contraseña incorrecto";
+                }            
                 pantalla+=msj;
             }
             

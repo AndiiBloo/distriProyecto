@@ -16,7 +16,7 @@ import pck_pdist_fact_conta.entidades.Usuarios;
  */
 class negocio_usuario {
     int ok;
-    public int buscar(String nombre, String password){
+    public Usuarios buscar(String nombre, String password){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
         EntityManager em1 = factory.createEntityManager();
         pck_pdist_fact_conta.entidades.Usuarios c1 = new pck_pdist_fact_conta.entidades.Usuarios();
@@ -26,18 +26,7 @@ class negocio_usuario {
             System.out.println(c1.getUsPassword());
             if(c1.getUsNombre().equals(nombre) && c1.getUsPassword().equals(password))
             {
-                switch(nombre)
-                {
-                    case "Andres":
-                        ok=1;
-                        break;
-                    case "Marco":
-                        ok=2;
-                        break;
-                    case "Admin":
-                        ok=3;
-                        break;
-                }
+                return c1;
             }
         }catch (Exception ex){
             System.out.println(ex.getMessage());
@@ -45,6 +34,6 @@ class negocio_usuario {
         } 
         em1.close();
         factory.close();
-        return ok;
+        return null;
      }
 }
