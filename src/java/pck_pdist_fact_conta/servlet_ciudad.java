@@ -8,13 +8,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "servlet_ciudad", urlPatterns = {"/servlet_ciudad"})
 public class servlet_ciudad extends HttpServlet {
 
     String msj="";
     negocio_ciudad nciu=new negocio_ciudad();
-    
+    pck_pdist_fact_conta.entidades.Usuarios us;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -25,58 +27,78 @@ public class servlet_ciudad extends HttpServlet {
         String codigo = "";
         String nombre = "";
         
+        HttpSession session = request.getSession(false);
+        if(session != null){ 
+            session = request.getSession();
+            us = (pck_pdist_fact_conta.entidades.Usuarios)session.getAttribute("usuario");
+        }
+        else{
+            us = null;
+            
+        }
         
         boton = request.getParameter("boton");
         codigo = request.getParameter("codigo");
         nombre = request.getParameter("nombre");
         
-        if (boton==null || boton=="")
-            pantalla=mostrar_pantalla("","");
+        if (boton==null || boton==""){
+            if(us != null && (us.getUsRol().intValueExact() == 1 || us.getUsRol().intValueExact() == 2)){
+                pantalla=mostrar_pantalla("","");
+            }
+            else{
+                response.sendRedirect("servlet_menu");
+            }
+        }
 
         if (boton!=null && boton!=""){
-            
-            if(boton.equals("Insertar")){
-                if (nciu.insertar(nombre)==1)
-                    msj = "Se insertó";
-                else
-                    msj = "No se pudo insertar";
-                pantalla = mostrar_pantalla("","");                  
-                pantalla+=msj;
+            if(us!=null && (us.getUsRol().intValueExact() == 1 || us.getUsRol().intValueExact() == 2)){
+                if(boton.equals("Insertar")){
+                    if (nciu.insertar(nombre)==1)
+                        msj = "Se insertó";
+                    else
+                        msj = "No se pudo insertar";
+                    pantalla = mostrar_pantalla("","");                  
+                    pantalla+=msj;
+                }
+
+                if(boton.equals("Eliminar")){
+                    if (nciu.eliminar(BigDecimal.valueOf(Double.valueOf(codigo)))==1)
+                        msj = "Se eliminó";
+                    else
+                        msj = "No se pudo eliminar";
+                    pantalla = mostrar_pantalla("","");
+                    pantalla+=msj;
+                }
+
+                if(boton.equals("Modificar")){
+                    if (nciu.modificar(BigDecimal.valueOf(Double.valueOf(codigo)), nombre)==1)
+                        msj = "Se modificó";
+                    else
+                        msj = "No se pudo modificar";
+                    pantalla = mostrar_pantalla("","");
+                    pantalla+=msj;
+                }
+
+                if(boton.equals("Buscar")){  
+                    nombre = nciu.buscar(BigDecimal.valueOf(Double.valueOf(codigo)));
+                    if(nombre!=null)
+                        msj="Se encontró";
+                    else
+                        msj="No se encontró";               
+                    pantalla = mostrar_pantalla(codigo,nombre);                  
+                    pantalla+=msj;
+                }
+
+                if(boton.equals("Regresar")){
+                    response.sendRedirect("servlet_menu");
+                }
             }
-            
-            if(boton.equals("Eliminar")){
-                if (nciu.eliminar(BigDecimal.valueOf(Double.valueOf(codigo)))==1)
-                    msj = "Se eliminó";
-                else
-                    msj = "No se pudo eliminar";
-                pantalla = mostrar_pantalla("","");
-                pantalla+=msj;
-            }
-            
-            if(boton.equals("Modificar")){
-                if (nciu.modificar(BigDecimal.valueOf(Double.valueOf(codigo)), nombre)==1)
-                    msj = "Se modificó";
-                else
-                    msj = "No se pudo modificar";
-                pantalla = mostrar_pantalla("","");
-                pantalla+=msj;
-            }
-            
-            if(boton.equals("Buscar")){  
-                nombre = nciu.buscar(BigDecimal.valueOf(Double.valueOf(codigo)));
-                if(nombre!=null)
-                    msj="Se encontró";
-                else
-                    msj="No se encontró";               
-                pantalla = mostrar_pantalla(codigo,nombre);                  
-                pantalla+=msj;
-            }
-            
-            if(boton.equals("Regresar")){
+            else{
                 response.sendRedirect("servlet_menu");
             }
         }
         out.println(pantalla);
+        
     }   
 
     public String mostrar_pantalla(String as_codigo, String as_nombre){       

@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 @WebServlet(name = "servlet_cliente", urlPatterns = {"/servlet_cliente"})
@@ -14,6 +15,7 @@ public class servlet_cliente extends HttpServlet {
     
     String msj="";
     negocio_cliente ncli=new negocio_cliente();
+    pck_pdist_fact_conta.entidades.Usuarios us;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -26,54 +28,73 @@ public class servlet_cliente extends HttpServlet {
         String nombre = "";
         String direccion = "";
         
+        HttpSession session = request.getSession(false);
+        if(session != null){ 
+            session = request.getSession();
+            us = (pck_pdist_fact_conta.entidades.Usuarios)session.getAttribute("usuario");
+        }
+        else{
+            us = null;
+        }
+        
         boton = request.getParameter("boton");
         ruc = request.getParameter("codigo");
         nombre = request.getParameter("nombre"); 
         direccion = request.getParameter("direccion");
         
-        if (boton==null || boton=="")
-            pantalla=mostrar_pantalla("","","");
+        if (boton==null || boton==""){
+            if(us != null && (us.getUsRol().intValueExact() == 1 || us.getUsRol().intValueExact() == 2)){
+                pantalla=mostrar_pantalla("","","");
+            }
+            else{
+                response.sendRedirect("servlet_menu");
+            }
+        }
 
         if (boton!=null && boton!=""){
-            
-            if(boton.equals("Insertar")){
-                if (ncli.insertar(ruc, nombre,direccion)==1)
-                    msj = "Se insertó";
-                else
-                    msj = "No se pudo insertar";
-                pantalla = mostrar_pantalla("","","");                  
-                pantalla+=msj;
+            if(us!=null && (us.getUsRol().intValueExact() == 1 || us.getUsRol().intValueExact() == 2)){
+                if(boton.equals("Insertar")){
+                    if (ncli.insertar(ruc, nombre,direccion)==1)
+                        msj = "Se insertó";
+                    else
+                        msj = "No se pudo insertar";
+                    pantalla = mostrar_pantalla("","","");                  
+                    pantalla+=msj;
+                }
+
+                if(boton.equals("Eliminar")){
+                    if (ncli.eliminar(ruc)==1)
+                        msj = "Se eliminó";
+                    else
+                        msj = "No se pudo eliminar";
+                    pantalla = mostrar_pantalla("","","");
+                    pantalla+=msj;
+                }
+
+                if(boton.equals("Modificar")){
+                    if (ncli.modificar(ruc, nombre,direccion)==1)
+                        msj = "Se modificó";
+                    else
+                        msj = "No se pudo modificar";
+                    pantalla = mostrar_pantalla("","","");
+                    pantalla+=msj;
+                }
+
+                if(boton.equals("Buscar")){  
+                    nombre = ncli.buscar(ruc).get(0);
+                    direccion = ncli.buscar(ruc).get(1);
+                    if(nombre!=null && direccion!=null)
+                        msj="Se encontró";
+                    else
+                        msj="No se encontró";               
+                    pantalla = mostrar_pantalla(ruc,nombre,direccion);                  
+                    pantalla+=msj;
+                }
+                if(boton.equals("Regresar")){
+                    response.sendRedirect("servlet_menu");
+                }
             }
-            
-            if(boton.equals("Eliminar")){
-                if (ncli.eliminar(ruc)==1)
-                    msj = "Se eliminó";
-                else
-                    msj = "No se pudo eliminar";
-                pantalla = mostrar_pantalla("","","");
-                pantalla+=msj;
-            }
-            
-            if(boton.equals("Modificar")){
-                if (ncli.modificar(ruc, nombre,direccion)==1)
-                    msj = "Se modificó";
-                else
-                    msj = "No se pudo modificar";
-                pantalla = mostrar_pantalla("","","");
-                pantalla+=msj;
-            }
-            
-            if(boton.equals("Buscar")){  
-                nombre = ncli.buscar(ruc).get(0);
-                direccion = ncli.buscar(ruc).get(1);
-                if(nombre!=null && direccion!=null)
-                    msj="Se encontró";
-                else
-                    msj="No se encontró";               
-                pantalla = mostrar_pantalla(ruc,nombre,direccion);                  
-                pantalla+=msj;
-            }
-            if(boton.equals("Regresar")){
+            else{
                 response.sendRedirect("servlet_menu");
             }
         }

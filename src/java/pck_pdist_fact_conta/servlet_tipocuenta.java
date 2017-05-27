@@ -8,33 +8,51 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "servlet_tipocuenta", urlPatterns = {"/servlet_tipocuenta"})
 public class servlet_tipocuenta extends HttpServlet 
 {
     String ls_mensaje="";
     negocio_tipocuenta ncli=new negocio_tipocuenta();
+    pck_pdist_fact_conta.entidades.Usuarios us;
+        
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String is_pantalla="";
         ls_mensaje="";
-            String is_boton="";
-            String ls_codigo="";
-            String ls_nombre="";
-            is_boton=request.getParameter("boton");
-            ls_codigo=request.getParameter("codigo"); 
-            ls_nombre=request.getParameter("nombre"); 
-            if (is_boton==null || is_boton =="")
-            {   
-                is_pantalla=desplegar_pantalla("","");
-            }    
+        String is_boton="";
+        String ls_codigo="";
+        String ls_nombre="";
+        
+        HttpSession session = request.getSession(false);
+        if(session != null){ 
+            session = request.getSession();
+            us = (pck_pdist_fact_conta.entidades.Usuarios)session.getAttribute("usuario");
+        }
+        else{
+            us = null;
+        }
+        
+        is_boton=request.getParameter("boton");
+        ls_codigo=request.getParameter("codigo"); 
+        ls_nombre=request.getParameter("nombre"); 
+        if (is_boton==null || is_boton =="")
+        {   
+            if(us != null && (us.getUsRol().intValueExact() == 1 || us.getUsRol().intValueExact() == 3)){
+                   is_pantalla=desplegar_pantalla("","");
+               }
+               else{
+                   response.sendRedirect("servlet_menu");
+               }
+        }    
 
 
-            if (is_boton!=null && is_boton !="")
-            {
-
+        if (is_boton!=null && is_boton !="")
+        {
+            if(us!=null && (us.getUsRol().intValueExact() == 1 || us.getUsRol().intValueExact() == 3)){
                 if(is_boton.equals("Insertar"))
                 {  if (ncli.insertar(ls_nombre)==1)
                     {
@@ -76,7 +94,7 @@ public class servlet_tipocuenta extends HttpServlet
                 }
                 if(is_boton.equals("Buscar"))
                 {  ls_nombre=ncli.buscar(BigDecimal.valueOf(Double.valueOf(ls_codigo))).get(0);
-                    
+
                    if(ls_nombre!=null)
                    {
                        ls_mensaje="Se encontró";
@@ -87,15 +105,17 @@ public class servlet_tipocuenta extends HttpServlet
                    } 
                    is_pantalla=desplegar_pantalla(ls_codigo,ls_nombre);                  
                    is_pantalla+=ls_mensaje;
-                    
+
                 }
                 if(is_boton.equals("Regresar"))
                 {
                     response.sendRedirect("servlet_menu");
                 }
-                
+
             }
-                    out.println(is_pantalla);
+        }
+        
+        out.println(is_pantalla);
                   
         
     }   
