@@ -1,0 +1,50 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package pck_pdist_fact_conta;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import pck_pdist_fact_conta.entidades.Usuarios;
+
+/**
+ *
+ * @author Andrés López
+ */
+class negocio_usuario {
+    int ok;
+    public int buscar(String nombre, String password){
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
+        EntityManager em1 = factory.createEntityManager();
+        pck_pdist_fact_conta.entidades.Usuarios c1 = new pck_pdist_fact_conta.entidades.Usuarios();
+        try{
+            c1 = (Usuarios)em1.createQuery("SELECT u FROM Usuarios u "
+                    + "WHERE u.usNombre LIKE :nombre").setParameter("nombre", nombre).getSingleResult();
+            System.out.println(c1.getUsPassword());
+            if(c1.getUsNombre().equals(nombre) && c1.getUsPassword().equals(password))
+            {
+                switch(nombre)
+                {
+                    case "Andres":
+                        ok=1;
+                        break;
+                    case "Marco":
+                        ok=2;
+                        break;
+                    case "Admin":
+                        ok=3;
+                        break;
+                }
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            ok = 0;
+        } 
+        em1.close();
+        factory.close();
+        return ok;
+     }
+}
