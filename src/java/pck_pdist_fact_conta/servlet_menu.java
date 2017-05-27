@@ -33,15 +33,15 @@ public class servlet_menu extends HttpServlet {
         
         boton = request.getParameter("boton");        
         
-        if (boton==null || boton=="")
+        if (boton==null || boton==""){
             if(us != null){
                 pantalla=mostrar_pantalla("","");
             }
             else{
                 response.sendRedirect("servlet_usuario");
             }
+        }
         
-
         if (boton!=null && boton!=""){
             if(us != null){
                 if (boton.equals("Clientes")) {
