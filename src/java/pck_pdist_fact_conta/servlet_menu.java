@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import pck_pdist_fact_conta.entidades.Usuarios;
 
 @WebServlet(name = "servlet_menu", urlPatterns = {"/servlet_menu"})
 public class servlet_menu extends HttpServlet {
