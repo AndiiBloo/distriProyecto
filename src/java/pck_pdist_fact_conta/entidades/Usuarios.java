@@ -121,7 +121,9 @@ public class Usuarios implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.entidades.Usuarios[ usCodigo=" + usCodigo + " ]";
+        return "Usuarios{" + "usCodigo=" + usCodigo + ", usNombre=" + usNombre + ", usPassword=" + usPassword + ", usRol=" + usRol + '}';
     }
+    
+    
     
 }

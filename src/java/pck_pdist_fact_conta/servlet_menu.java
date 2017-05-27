@@ -7,9 +7,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import pck_pdist_fact_conta.entidades.Usuarios;
 
 @WebServlet(name = "servlet_menu", urlPatterns = {"/servlet_menu"})
 public class servlet_menu extends HttpServlet {
+    
+    pck_pdist_fact_conta.entidades.Usuarios us;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -17,26 +21,47 @@ public class servlet_menu extends HttpServlet {
         PrintWriter out = response.getWriter();
         String pantalla = "";
         String boton = "";
+        HttpSession session = request.getSession(false);
+        if(session != null){ 
+            session = request.getSession();
+            us = (pck_pdist_fact_conta.entidades.Usuarios)session.getAttribute("usuario");
+        }
+        else{
+            us = null;
+            
+        }
         
         boton = request.getParameter("boton");        
         
         if (boton==null || boton=="")
-            pantalla=mostrar_pantalla("","");
+            if(us != null){
+                pantalla=mostrar_pantalla("","");
+            }
+            else{
+                response.sendRedirect("servlet_usuario");
+            }
+        
 
         if (boton!=null && boton!=""){
-            if (boton.equals("Clientes")) {
-                response.sendRedirect("index.html");
+            if(us != null){
+                if (boton.equals("Clientes")) {
+                    response.sendRedirect("index.html");
+                }
+                if(boton.equals("Ciudades")){
+                    response.sendRedirect("servlet_ciudad");
+                }
+                if(boton.equals("Cuentas")){
+                    response.sendRedirect("servlet_cuenta");
+                }
+                if(boton.equals("Tipo de Cuentas")){
+                    response.sendRedirect("servlet_tipocuenta");
+                }
+                if(boton.equals("Cerrar Sesion")){
+                    response.sendRedirect("servlet_usuario");
+                    session.removeAttribute("usuario");
+                }
             }
-            if(boton.equals("Ciudades")){
-                response.sendRedirect("servlet_ciudad");
-            }
-            if(boton.equals("Cuentas")){
-                response.sendRedirect("servlet_cuenta");
-            }
-            if(boton.equals("Tipo de Cuentas")){
-                response.sendRedirect("servlet_tipocuenta");
-            }
-            if(boton.equals("Cerrar Sesion")){
+            else{
                 response.sendRedirect("servlet_usuario");
             }
         }
@@ -44,27 +69,69 @@ public class servlet_menu extends HttpServlet {
             
     }
     
-    public String mostrar_pantalla(String nombre, String password){       
-        String pantalla="";
-        pantalla+="<html>";
-        pantalla+="<head>";
-        pantalla+="</head>";
-        pantalla+="<body>";
-        pantalla+="<h2>Menu Administrador</h2>";
-        pantalla+="<form action='servlet_menu' method='post'>";
-        pantalla+="<input type='submit' value='Clientes' name='boton'></input>";
-        pantalla+="<br><br>";
-        pantalla+="<input type='submit' value='Ciudades' name='boton' ></input>";
-        pantalla+="<br><br>";
-        pantalla+="<input type='submit' value='Cuentas' name='boton' ></input>";
-        pantalla+="<br><br>";
-        pantalla+="<input type='submit' value='Tipo de Cuentas' name='boton' ></input>";
-        pantalla+="<br><br>";
-        pantalla+="<input type='submit' value='Cerrar Sesion' name='boton' ></input>";
-        pantalla+="</form>";            
-        pantalla+="</body>";
-        pantalla+="</html>";
+    public String mostrar_pantalla(String nombre, String password){  
         
+        String pantalla="";
+        switch(us.getUsRol().intValue()){
+                case 1:
+                    pantalla="";
+                    pantalla+="<html>";
+                    pantalla+="<head>";
+                    pantalla+="</head>";
+                    pantalla+="<body>";
+                    pantalla+="<h2>Menu Administrador</h2>";
+                    pantalla+="<form action='servlet_menu' method='post'>";
+                    pantalla+="<input type='submit' value='Clientes' name='boton'></input>";
+                    pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Ciudades' name='boton' ></input>";
+                    pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Cuentas' name='boton' ></input>";
+                    pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Tipo de Cuentas' name='boton' ></input>";
+                    pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Cerrar Sesion' name='boton' ></input>";
+                    pantalla+="</form>";            
+                    pantalla+="</body>";
+                    pantalla+="</html>";
+                break;
+                case 2:
+                    pantalla="";
+                    pantalla+="<html>";
+                    pantalla+="<head>";
+                    pantalla+="</head>";
+                    pantalla+="<body>";
+                    pantalla+="<h2>Menu Facturación</h2>";
+                    pantalla+="<form action='servlet_menu' method='post'>";
+                    pantalla+="<input type='submit' value='Clientes' name='boton'></input>";
+                    pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Ciudades' name='boton' ></input>";
+                    pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Cerrar Sesion' name='boton' ></input>";
+                    pantalla+="</form>";            
+                    pantalla+="</body>";
+                    pantalla+="</html>";
+                break;
+                case 3:
+                    pantalla="";
+                    pantalla+="<html>";
+                    pantalla+="<head>";
+                    pantalla+="</head>";
+                    pantalla+="<body>";
+                    pantalla+="<h2>Menu Contabilidad</h2>";
+                    pantalla+="<form action='servlet_menu' method='post'>";
+                    pantalla+="<input type='submit' value='Cuentas' name='boton' ></input>";
+                    pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Tipo de Cuentas' name='boton' ></input>";
+                    pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Cerrar Sesion' name='boton' ></input>";
+                    pantalla+="</form>";            
+                    pantalla+="</body>";
+                    pantalla+="</html>";
+                break;
+                default:
+                    
+                break;
+            }
         return pantalla;
     }
 
