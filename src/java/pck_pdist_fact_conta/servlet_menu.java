@@ -44,7 +44,7 @@ public class servlet_menu extends HttpServlet {
         if (boton!=null && boton!=""){
             if(us != null){
                 if (boton.equals("Clientes")) {
-                    response.sendRedirect("index.html");
+                    response.sendRedirect("servlet_cliente");
                 }
                 if(boton.equals("Ciudades")){
                     response.sendRedirect("servlet_ciudad");
