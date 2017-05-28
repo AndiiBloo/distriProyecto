@@ -112,7 +112,7 @@ public class negocio_cuenta {
         int max=0;
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
         EntityManager em1 = factory.createEntityManager();   
-        max= (Integer)em1.createQuery("select max(cue_codigo) from cuenta").getSingleResult();
+        max= (Integer)em1.createQuery("SELECT MAX(cueCodigo) FROM Cuenta").getSingleResult();
         return max;
     }
      public void procesar()
