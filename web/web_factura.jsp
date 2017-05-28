@@ -10,142 +10,168 @@
 <%@page import="pck_pdist_fact_conta.negocio_cliente"%>
 <%@ page import="java.io.PrintWriter" %> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Factura</title>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        
-        <!--<script type="text/javascript">
-            $(document).ready(function(){
-                $('#btnEnviar').click(function(){
-                    var ruc = $('#cbCliente').val();
-                    var fecha = $('#txtFecha').val();
-                    var ciudad = $('#cbCiudad').val();
 
-                    $.ajax({
-                        type: 'POST',
-                        url: 'servlet_factura',
-                        data: {
-                            cbCliente: ruc,
-                            txtFecha: fecha,
-                            cbCiudad: ciudad
-                        },
-                        success: function(result){
-                            $('#res').text(result);
-                        }
+<% 
+    pck_pdist_fact_conta.entidades.Usuarios us;
+    
+    HttpSession ses = request.getSession(false);
+    if(ses != null){ 
+        ses = request.getSession();
+        us = (pck_pdist_fact_conta.entidades.Usuarios)ses.getAttribute("usuario");
+    }
+    else{
+        us = null;
+    }
+    
+    if(us != null && (us.getUsRol().intValueExact() == 1 || us.getUsRol().intValueExact() == 2)){
+%>
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <title>Factura</title>
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+            <!--<script type="text/javascript">
+                $(document).ready(function(){
+                    $('#btnEnviar').click(function(){
+                        var ruc = $('#cbCliente').val();
+                        var fecha = $('#txtFecha').val();
+                        var ciudad = $('#cbCiudad').val();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: 'servlet_factura',
+                            data: {
+                                cbCliente: ruc,
+                                txtFecha: fecha,
+                                cbCiudad: ciudad
+                            },
+                            success: function(result){
+                                $('#res').text(result);
+                            }
+                        });
                     });
                 });
-            });
-        </script>-->
-    </head>
-    <body>
-        <script>
-            function contador()
-            {
-                var i=0;
-                 $('#aTabla tr').each(function() {
-                     $(this).find(".aNo").html(i);
-                     i++;
-                  });
-            }
+            </script>-->
+        </head>
+        <body>
+            <script>
+                function contador()
+                {
+                    var i=0;
+                     $('#aTabla tr').each(function() {
+                         $(this).find(".aNo").html(i);
+                         i++;
+                      });
+                }
 
-            $(document).ready(function(){
-                $('#agregarFila').click(function(){
-                    var anum=$('#aTabla tr').length;
-                    trow=  "<tr><td class='aNo'>"+anum+"</td>"+
-                        "<td><input name='aNombre' type='text'></td>"+
-                        "<td><input name='aCantidad' type='text'></td>"+
-                        "<td><input name='aPrecio' type='text'></td>"+
-                       "<td><button type='button' class='quitar'>Quitar</button></td></tr>";
-                    $('#aTabla').append(trow);
+                $(document).ready(function(){
+                    $('#agregarFila').click(function(){
+                        var anum=$('#aTabla tr').length;
+                        trow=  "<tr><td class='aNo'>"+anum+"</td>"+
+                            "<td><input name='aNombre' type='text'></td>"+
+                            "<td><input name='aCantidad' type='text'></td>"+
+                            "<td><input name='aPrecio' type='text'></td>"+
+                           "<td><button type='button' class='quitar'>Quitar</button></td></tr>";
+                        $('#aTabla').append(trow);
+                    });
                 });
-            });
 
-            $(document).on('click', 'button.quitar', function () {
-                   $(this).closest('tr').remove();
-                   contador();
-                 return false;
-             });
-        </script>
-        
-        <%
-            negocio_cliente ncli = new negocio_cliente();
-            negocio_ciudad nciu = new negocio_ciudad();
-            List<Cliente> listCli = ncli.mostrarClientes();
-            List<CiudadEntrega> listCiu = nciu.mostrarCiudades();
-        %>
-        
-        <h1> Tabla Compleja - Factura </h1>
-        <form action="servlet_factura" method="post">
-            <h2>Cabecera</h2>
-            <table>
-                <tr>
-                    <td style="font-weight: bold;">
-                        Ruc:
-                    </td>
-                    <td>
-                        <select id="cbCliente" name="cbCliente">
-                            <%
-                                for(int i=0; i<listCli.size();i++){
-                            %>
-                            <option value="<%=listCli.get(i).getCliRuc()%>">
-                                <%=listCli.get(i).getCliNombre()%>
-                            <%
-                                }
-                            %>
-                            </option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">
-                        Fecha:
-                    </td>
-                    <td>
-                    <% 
-                        DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        java.util.Date hoy = Calendar.getInstance().getTime();
-                        String fecha = dFormat.format(hoy);
-                    %>
-                    <input type="date" name="txtFecha" value="<%= fecha%>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">
-                        Ciudad: 
-                    </td>
-                    <td>
-                        <select id="cbCiudad" name="cbCiudad">
-                            <%
-                                for(int i=0; i<listCiu.size();i++){
-                            %>
-                            <option value="<%=listCiu.get(i).getCiuCodigo()%>">
-                                <%=listCiu.get(i).getCiuNombre()%>
-                            <%
-                                }
-                            %>
-                            </option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-            
-            <h2>Artículos</h2>
-            <input id="agregarFila" type="button" value="Agregar Fila">
-            <table id="aTabla">
-                <tr>
-                    <td>N°</td>
-                    <td>Artículo</td>
-                    <td>Cantidad</td>
-                    <td>Precio</td>
-                    <td>Eliminar</td>
-                </tr>
-            </table>
-            <br>
-            <input type="submit" value="Enviar">
-            <input type="reset" value="Cancelar">
-        </form>
+                $(document).on('click', 'button.quitar', function () {
+                       $(this).closest('tr').remove();
+                       contador();
+                     return false;
+                 });
+            </script>
+
+            <%
+                negocio_cliente ncli = new negocio_cliente();
+                negocio_ciudad nciu = new negocio_ciudad();
+                List<Cliente> listCli = ncli.mostrarClientes();
+                List<CiudadEntrega> listCiu = nciu.mostrarCiudades();
+            %>
+
+            <h1> Tabla Compleja - Factura </h1>
+            <form action="servlet_factura" method="post">
+                <h2>Cabecera</h2>
+                <table>
+                    <tr>
+                        <td style="font-weight: bold;">
+                            Ruc:
+                        </td>
+                        <td>
+                            <select id="cbCliente" name="cbCliente">
+                                <%
+                                    for(int i=0; i<listCli.size();i++){
+                                %>
+                                <option value="<%=listCli.get(i).getCliRuc()%>">
+                                    <%=listCli.get(i).getCliNombre()%>
+                                <%
+                                    }
+                                %>
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">
+                            Fecha:
+                        </td>
+                        <td>
+                        <% 
+                            DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            java.util.Date hoy = Calendar.getInstance().getTime();
+                            String fecha = dFormat.format(hoy);
+                        %>
+                        <input type="date" name="txtFecha" value="<%= fecha%>"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">
+                            Ciudad: 
+                        </td>
+                        <td>
+                            <select id="cbCiudad" name="cbCiudad">
+                                <%
+                                    for(int i=0; i<listCiu.size();i++){
+                                %>
+                                <option value="<%=listCiu.get(i).getCiuCodigo()%>">
+                                    <%=listCiu.get(i).getCiuNombre()%>
+                                <%
+                                    }
+                                %>
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+
+                <h2>Artículos</h2>
+                <input id="agregarFila" type="button" value="Agregar Fila">
+                <table id="aTabla">
+                    <tr>
+                        <td>N°</td>
+                        <td>Artículo</td>
+                        <td>Cantidad</td>
+                        <td>Precio</td>
+                        <td>Eliminar</td>
+                    </tr>
+                </table>
+                <br>
+                <input type="submit" name="boton" value="Enviar">
+                <input type="reset" value="Cancelar">
+                <input type="submit" name="boton" value="Regresar">
+            </form>
+        </body>
+    </html>
+<%  } 
+    else{
+%>
+<html>
+    <body>
+        <script> alert('Sesión incorrecta');</script>
     </body>
 </html>
+<%  }
+%>
