@@ -109,7 +109,6 @@ public class negocio_ciudad {
         
         try{
             listCiudades = em1.createNamedQuery("CiudadEntrega.findAll",CiudadEntrega.class).getResultList();
-            System.out.println(listCiudades.toString());
         }catch(Exception ex){
             System.out.println(ex.getMessage());
         }

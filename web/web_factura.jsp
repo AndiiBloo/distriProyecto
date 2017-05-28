@@ -16,6 +16,29 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Factura</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        
+        <!--<script type="text/javascript">
+            $(document).ready(function(){
+                $('#btnEnviar').click(function(){
+                    var ruc = $('#cbCliente').val();
+                    var fecha = $('#txtFecha').val();
+                    var ciudad = $('#cbCiudad').val();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'servlet_factura',
+                        data: {
+                            cbCliente: ruc,
+                            txtFecha: fecha,
+                            cbCiudad: ciudad
+                        },
+                        success: function(result){
+                            $('#res').text(result);
+                        }
+                    });
+                });
+            });
+        </script>-->
     </head>
     <body>
         <script>
@@ -46,6 +69,7 @@
                  return false;
              });
         </script>
+        
         <%
             negocio_cliente ncli = new negocio_cliente();
             negocio_ciudad nciu = new negocio_ciudad();
@@ -54,7 +78,8 @@
         %>
         
         <h1> Tabla Compleja - Factura </h1>
-        <form method="post" action="servlet_factura">
+        <form action="servlet_factura" method="post">
+            <h2>Cabecera</h2>
             <table>
                 <tr>
                     <td style="font-weight: bold;">
@@ -84,7 +109,7 @@
                         java.util.Date hoy = Calendar.getInstance().getTime();
                         String fecha = dFormat.format(hoy);
                     %>
-                        <input type="date" value="<%= fecha%>"/>
+                    <input type="date" name="txtFecha" value="<%= fecha%>"/>
                     </td>
                 </tr>
                 <tr>
@@ -107,8 +132,8 @@
                 </tr>
             </table>
             
-            <h3>Artículos</h3>
-            <input style="text-align: right;" id="agregarFila" type="button" value="Agregar Fila">
+            <h2>Artículos</h2>
+            <input id="agregarFila" type="button" value="Agregar Fila">
             <table id="aTabla">
                 <tr>
                     <td>N°</td>
@@ -118,8 +143,9 @@
                     <td>Eliminar</td>
                 </tr>
             </table>
-            <input type="Submit" value="Enviar">
-            <input type="Reset" value="Cancelar">
+            <br>
+            <input type="submit" value="Enviar">
+            <input type="reset" value="Cancelar">
         </form>
     </body>
 </html>
