@@ -123,7 +123,6 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.entidades.Cliente[ cliRuc=" + cliRuc + " ]";
+        return "Cliente{" + "cliRuc=" + cliRuc + ", cliNombre=" + cliNombre + ", cliDireccion=" + cliDireccion + ", facturaList=" + facturaList + '}';
     }
-    
 }

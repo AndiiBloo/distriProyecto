@@ -101,8 +101,22 @@ public class negocio_cliente {
         return datos;
      }
     
-     public void procesar()
-     {
-	// programar el código de la regla de negocio         
-     }    
+    public List<Cliente> mostrarClientes(){
+        List<Cliente> listClientes = new ArrayList<>();
+        
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
+        EntityManager em1 = factory.createEntityManager();
+        
+        try{
+            listClientes = em1.createNamedQuery("Cliente.findAll",Cliente.class).getResultList();
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        return listClientes;
+    }
+    
+    public void procesar()
+    {
+       // programar el código de la regla de negocio         
+    }    
 }

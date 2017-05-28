@@ -6,6 +6,8 @@
 package pck_pdist_fact_conta;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -98,4 +100,19 @@ public class negocio_ciudad {
         factory.close();
         return nombre;
      }
+    
+    public List<CiudadEntrega> mostrarCiudades(){
+        List<CiudadEntrega> listCiudades = new ArrayList<>();
+        
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
+        EntityManager em1 = factory.createEntityManager();
+        
+        try{
+            listCiudades = em1.createNamedQuery("CiudadEntrega.findAll",CiudadEntrega.class).getResultList();
+            System.out.println(listCiudades.toString());
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        return listCiudades;
+    }
 }
