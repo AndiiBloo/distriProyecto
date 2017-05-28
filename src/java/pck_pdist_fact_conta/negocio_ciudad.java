@@ -59,9 +59,9 @@ public class negocio_ciudad {
         em1.close();
         factory.close();
         return ok;
-     }
+    }
     
-     public int modificar(BigDecimal codigo, String nombre){
+    public int modificar(BigDecimal codigo, String nombre){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
         EntityManager em1 = factory.createEntityManager();             
         pck_pdist_fact_conta.entidades.CiudadEntrega c1 = new pck_pdist_fact_conta.entidades.CiudadEntrega();                  
@@ -81,7 +81,7 @@ public class negocio_ciudad {
         em1.close();
         factory.close();
         return ok;
-     }
+    }
      
     public String buscar(BigDecimal codigo){
         String nombre;
@@ -99,7 +99,7 @@ public class negocio_ciudad {
         em1.close();
         factory.close();
         return nombre;
-     }
+    }
     
     public List<CiudadEntrega> mostrarCiudades(){
         List<CiudadEntrega> listCiudades = new ArrayList<>();

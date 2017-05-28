@@ -50,9 +50,9 @@ public class negocio_cliente {
         em1.close();
         factory.close();
         return ok;
-     }
+    }
     
-     public int modificar(String ruc, String nombre, String direccion){
+    public int modificar(String ruc, String nombre, String direccion){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
         EntityManager em1 = factory.createEntityManager();             
         pck_pdist_fact_conta.entidades.Cliente c1 = new pck_pdist_fact_conta.entidades.Cliente();                  
@@ -73,7 +73,7 @@ public class negocio_cliente {
         em1.close();
         factory.close();
         return ok;
-     }
+    }
      
     public List<String> buscar(String ruc){
         List<String> datos = new ArrayList<>();
@@ -99,7 +99,7 @@ public class negocio_cliente {
         em1.close();
         factory.close();
         return datos;
-     }
+    }
     
     public List<Cliente> mostrarClientes(){
         List<Cliente> listClientes = new ArrayList<>();
@@ -113,10 +113,5 @@ public class negocio_cliente {
             System.out.println(ex.getMessage());
         }
         return listClientes;
-    }
-    
-    public void procesar()
-    {
-       // programar el código de la regla de negocio         
-    }    
+    }  
 }
