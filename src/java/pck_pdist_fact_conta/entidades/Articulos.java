@@ -7,6 +7,7 @@ package pck_pdist_fact_conta.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Articulos.findAll", query = "SELECT a FROM Articulos a")
     , @NamedQuery(name = "Articulos.findByArtCodigo", query = "SELECT a FROM Articulos a WHERE a.artCodigo = :artCodigo")
     , @NamedQuery(name = "Articulos.findByArtNombre", query = "SELECT a FROM Articulos a WHERE a.artNombre = :artNombre")
-    , @NamedQuery(name = "Articulos.findByArtPrecio", query = "SELECT a FROM Articulos a WHERE a.artPrecio = :artPrecio")})
+    , @NamedQuery(name = "Articulos.findByArtPrecio", query = "SELECT a FROM Articulos a WHERE a.artPrecio = :artPrecio")
+    , @NamedQuery(name = "Articulos.findByArtCantidad", query = "SELECT a FROM Articulos a WHERE a.artCantidad = :artCantidad")})
 public class Articulos implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,6 +52,8 @@ public class Articulos implements Serializable {
     @NotNull
     @Column(name = "ART_PRECIO")
     private double artPrecio;
+    @Column(name = "ART_CANTIDAD")
+    private BigInteger artCantidad;
     @JoinColumn(name = "FAC_NUMERO", referencedColumnName = "FAC_NUMERO")
     @ManyToOne(optional = false)
     private Factura facNumero;
@@ -89,6 +93,14 @@ public class Articulos implements Serializable {
 
     public void setArtPrecio(double artPrecio) {
         this.artPrecio = artPrecio;
+    }
+
+    public BigInteger getArtCantidad() {
+        return artCantidad;
+    }
+
+    public void setArtCantidad(BigInteger artCantidad) {
+        this.artCantidad = artCantidad;
     }
 
     public Factura getFacNumero() {
