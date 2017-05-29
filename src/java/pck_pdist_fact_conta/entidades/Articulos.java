@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Articulos.findByArtNombre", query = "SELECT a FROM Articulos a WHERE a.artNombre = :artNombre")
     , @NamedQuery(name = "Articulos.findByArtPrecio", query = "SELECT a FROM Articulos a WHERE a.artPrecio = :artPrecio")
     , @NamedQuery(name = "Articulos.findByArtCantidad", query = "SELECT a FROM Articulos a WHERE a.artCantidad = :artCantidad")
-    , @NamedQuery(name = "Articulos.findByFacNumero", query= "SELECT a FROM Articulos a WHERE a.facNumero = :facNumero")})
+    , @NamedQuery(name = "Articulos.findByFacNumero", query= "SELECT a FROM Articulos a WHERE a.facNumero = :facNumero")
+    , @NamedQuery(name = "Articulos.findCod", query="SELECT a.artCodigo FROM Articulos a WHERE a.facNumero = :facNum AND a.artNombre = :artNom")})
 public class Articulos implements Serializable {
 
     private static final long serialVersionUID = 1L;

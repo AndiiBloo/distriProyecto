@@ -61,7 +61,7 @@ public class negocio_articulo {
     
     public int modificar(BigDecimal codigo, Factura numF, String nombreA, float precioA, BigInteger cantidadA){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
-        EntityManager em1 = factory.createEntityManager();             
+        EntityManager em1 = factory.createEntityManager();
         pck_pdist_fact_conta.entidades.Articulos c1 = new pck_pdist_fact_conta.entidades.Articulos();                  
 
         try{
@@ -100,5 +100,24 @@ public class negocio_articulo {
             factory.close();
         }
         return listArticulos;
+    }
+    
+    public BigDecimal obtenerCodigo(Factura numF, String nombreA){
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
+        EntityManager em1 = factory.createEntityManager();
+        pck_pdist_fact_conta.entidades.Articulos c1 = new pck_pdist_fact_conta.entidades.Articulos();                  
+        BigDecimal codigo = null;
+        try{
+        codigo = em1.createNamedQuery("Articulos.findCod", BigDecimal.class)
+                            .setParameter("facNum", numF)
+                            .setParameter("artNom", nombreA).getSingleResult();
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }finally{
+            em1.close();
+            factory.close();
+        }
+        
+        return codigo;
     }
 }

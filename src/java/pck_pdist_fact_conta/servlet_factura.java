@@ -32,6 +32,7 @@ public class servlet_factura extends HttpServlet {
 
     negocio_factura nfac = new negocio_factura();
     negocio_articulo nart = new negocio_articulo();
+    String msj="";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -100,14 +101,13 @@ public class servlet_factura extends HttpServlet {
         }catch(Exception ex){
             System.out.println(ex.getMessage());
         }
-        
-        Factura numFInsertar = nfac.obtenerNum();
-        
+        Factura insFac = nfac.obtenerNum();
+        String nFactura = "";
         if(boton!=null && boton!=""){
             if(boton.equals("Insertar")){
                 if(nfac.insertar(ciu,cli,fecha)==1){
                     for(int i=0;i<nomArticulo.length;i++){
-                        nart.insertar(numFInsertar, nomArticulo[i], pArticulo[i], new BigInteger(cantArticulo[i]));
+                        nart.insertar(insFac, nomArticulo[i], pArticulo[i], new BigInteger(cantArticulo[i]));
                     }
                     request.setAttribute("msj", "Inserción correcta");
                     request.getRequestDispatcher("web_factura.jsp").forward(request, response);
@@ -142,15 +142,6 @@ public class servlet_factura extends HttpServlet {
                     request.getRequestDispatcher("web_factura.jsp").forward(request, response);
                 }
             }
-            if(boton.equals("Modificar Articulos")){
-                pantalla = desplegar_pantalla(numFac,nart.mostrarArticulos(numFact));
-            }
-            if(boton.equals("Modificar Articulo")){
-                String nFactura = String.valueOf(request.getAttribute("nFactura"));
-                System.out.println("mod"+nFactura);
-                Factura nFc = new Factura(new BigDecimal(nFactura));
-                pantalla = desplegar_pantalla(nFactura, nart.mostrarArticulos(nFc));
-            }
             if(boton.equals("Buscar Factura")){
                 
                 pck_pdist_fact_conta.entidades.CiudadEntrega  cAtr = 
@@ -172,9 +163,63 @@ public class servlet_factura extends HttpServlet {
                 }
             }
             
+            if(boton.equals("Modificar Articulos")){
+                pantalla = desplegar_pantalla(numFac,nart.mostrarArticulos(numFact));
+                
+            }
             if(boton.equals("Regresar")){
                 response.sendRedirect("servlet_menu");
             }
+            if(boton.equals("Modificar Articulo")){
+                nFactura = request.getParameter("numFac");
+                Factura nFc = new Factura(new BigDecimal(nFactura));
+                String[] aNombre;
+                aNombre = request.getParameterValues("aNombre");
+                String[] aCantidad;
+                aCantidad = request.getParameterValues("aCantidad");
+                String[] aPrecio;
+                aPrecio = request.getParameterValues("aPrecio");
+                float[] aPrc = new float[1024];
+                try{
+                    for(int i=0;i<nomArticulo.length;i++){
+                        aPrc[i] = Float.parseFloat(aPrecio[i]);
+                    }
+                }catch(Exception ex){
+                    System.out.println(ex.getMessage());
+                }
+                int i=0;
+                for(Articulos a:nart.mostrarArticulos(numFact)){
+                    BigDecimal cod = nart.obtenerCodigo(nFc, a.getArtNombre());
+                    if(nart.modificar(cod, nFc, aNombre[i], aPrc[i], new BigInteger(aCantidad[i])) == 1){
+                       msj="Articulo modificado"; 
+                    }
+                    else{
+                        msj="Error al modificar el articulo";
+                    }
+                    i++;
+                }
+                pantalla = desplegar_pantalla(nFactura, nart.mostrarArticulos(nFc));
+                pantalla+=msj;
+            }
+            if(boton.equals("Eliminar Articulos")){
+                String[] aEliminar = request.getParameterValues("aEliminar");
+                nFactura = request.getParameter("numFac");
+                Factura nFc = new Factura(new BigDecimal(nFactura));
+                String[] aNombre;
+                aNombre = request.getParameterValues("aNombre");
+                for (String aEliminar1 : aEliminar) {
+                    BigDecimal cod = nart.obtenerCodigo(nFc, aNombre[Integer.parseInt(aEliminar1)]);
+                    if(nart.eliminar(cod)==1){
+                        msj="Articulo eliminado";
+                    }
+                    else{
+                        msj="Error al eliminar";
+                    }
+                }
+                pantalla = desplegar_pantalla(nFactura, nart.mostrarArticulos(nFc));
+                pantalla+=msj;
+            }
+            
             if(boton.equals("Regresar Factura")){
                 response.sendRedirect("web_factura.jsp");
             }
@@ -189,9 +234,9 @@ public class servlet_factura extends HttpServlet {
         pantalla+="</head>";
         pantalla+="<body>";
         pantalla+="<h2>Tablas Simples - Cliente</h2>";
-        pantalla+="<form action='servlet_factura' method='get'>";
+        pantalla+="<form action='servlet_factura' method='post'>";
         pantalla+="Número Factura: "+as_factura;
-        pantalla+="<input type='hidden' name='nFactura' value='"+as_factura+"'>";
+        pantalla+="<input type='hidden' name='numFac' value='"+as_factura+"'>";
         pantalla+="<br><br>";
         pantalla+="<h2>Artículos</h2>";
         pantalla+="<table>";
@@ -204,18 +249,21 @@ public class servlet_factura extends HttpServlet {
         pantalla+="<td>Eliminar</td>";
         pantalla+="</tr>";
         int i=1;
+        int aux=0;
         for(Articulos a:as_articulos){
             pantalla+="<tr>";
             pantalla+="<td>"+ i++ +"</td>";
             pantalla+="<td><input name='aNombre' value='"+a.getArtNombre()+"' type='text'></td>";
             pantalla+="<td><input name='aCantidad' value='"+a.getArtCantidad()+"' type='text'></td>";
             pantalla+="<td><input name='aPrecio' value='"+a.getArtPrecio()+"' type='text'></td>";
-            pantalla+="<td><button type='button' class='quitar'>Quitar</button></td>";
+            pantalla+="<td><input type='checkbox' name='aEliminar' value='"+aux+"'></td>";
             pantalla+="</tr>";
+            aux++;
         }
         pantalla+="</table>";
         pantalla+="<br>";
         pantalla+="<input type='submit' value='Modificar Articulo' name='boton'></input> ";
+        pantalla+="<input type='submit' value='Eliminar Articulos' name='boton'></input>";
         pantalla+="<input type='submit' value='Regresar Factura' name='boton'></input>";
         pantalla+="</form>";            
         pantalla+="</body>";

@@ -22,7 +22,6 @@
     else{
         us = null;
     }
-    
     if(us != null && (us.getUsRol().intValueExact() == 1 || us.getUsRol().intValueExact() == 2)){
 %>
     <!DOCTYPE html>
