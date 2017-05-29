@@ -35,9 +35,10 @@ public class negocio_ciudad {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
+        }finally{
+            em1.close();
+            factory.close();
         }
-        em1.close();
-        factory.close();
         return ok;
     }
     
@@ -55,9 +56,10 @@ public class negocio_ciudad {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
+        }finally{
+            em1.close();
+            factory.close();
         }
-        em1.close();
-        factory.close();
         return ok;
     }
     
@@ -77,9 +79,10 @@ public class negocio_ciudad {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
-        } 
-        em1.close();
-        factory.close();
+        }finally{
+            em1.close();
+            factory.close();
+        }
         return ok;
     }
      
@@ -95,9 +98,10 @@ public class negocio_ciudad {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             nombre = null;
-        } 
-        em1.close();
-        factory.close();
+        }finally{
+            em1.close();
+            factory.close();
+        }
         return nombre;
     }
     
@@ -111,6 +115,9 @@ public class negocio_ciudad {
             listCiudades = em1.createNamedQuery("CiudadEntrega.findAll",CiudadEntrega.class).getResultList();
         }catch(Exception ex){
             System.out.println(ex.getMessage());
+        }finally{
+            em1.close();
+            factory.close();
         }
         return listCiudades;
     }

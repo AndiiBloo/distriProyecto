@@ -31,9 +31,10 @@ public class negocio_articulo {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
+        }finally{
+            em1.close();
+            factory.close();
         }
-        em1.close();
-        factory.close();
         return ok;
     }
     
@@ -51,9 +52,10 @@ public class negocio_articulo {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
+        }finally{
+            em1.close();
+            factory.close();
         }
-        em1.close();
-        factory.close();
         return ok;
     }
     
@@ -76,9 +78,10 @@ public class negocio_articulo {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
-        } 
-        em1.close();
-        factory.close();
+        }finally{
+            em1.close();
+            factory.close();
+        }
         return ok;
     }
     
@@ -92,6 +95,9 @@ public class negocio_articulo {
             listArticulos = em1.createNamedQuery("Articulos.findByFacNumero", Articulos.class).setParameter("facNumero", facNumero).getResultList();
         }catch(Exception ex){
             System.out.println(ex.getMessage());
+        }finally{
+            em1.close();
+            factory.close();
         }
         return listArticulos;
     }

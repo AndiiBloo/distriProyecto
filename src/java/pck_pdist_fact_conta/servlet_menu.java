@@ -49,6 +49,9 @@ public class servlet_menu extends HttpServlet {
                 if(boton.equals("Ciudades")){
                     response.sendRedirect("servlet_ciudad");
                 }
+                if(boton.equals("Factura")){
+                    response.sendRedirect("web_factura.jsp");
+                }
                 if(boton.equals("Cuentas")){
                     response.sendRedirect("servlet_cuenta");
                 }
@@ -84,6 +87,8 @@ public class servlet_menu extends HttpServlet {
                     pantalla+="<br><br>";
                     pantalla+="<input type='submit' value='Ciudades' name='boton' ></input>";
                     pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Factura' name='boton' ></input>";
+                    pantalla+="<br><br>";
                     pantalla+="<input type='submit' value='Cuentas' name='boton' ></input>";
                     pantalla+="<br><br>";
                     pantalla+="<input type='submit' value='Tipo de Cuentas' name='boton' ></input>";
@@ -104,6 +109,8 @@ public class servlet_menu extends HttpServlet {
                     pantalla+="<input type='submit' value='Clientes' name='boton'></input>";
                     pantalla+="<br><br>";
                     pantalla+="<input type='submit' value='Ciudades' name='boton' ></input>";
+                    pantalla+="<br><br>";
+                    pantalla+="<input type='submit' value='Factura' name='boton' ></input>";
                     pantalla+="<br><br>";
                     pantalla+="<input type='submit' value='Cerrar Sesion' name='boton' ></input>";
                     pantalla+="</form>";            

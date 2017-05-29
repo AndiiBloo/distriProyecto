@@ -31,29 +31,6 @@
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>Factura</title>
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-
-            <!--<script type="text/javascript">
-                $(document).ready(function(){
-                    $('#btnEnviar').click(function(){
-                        var ruc = $('#cbCliente').val();
-                        var fecha = $('#txtFecha').val();
-                        var ciudad = $('#cbCiudad').val();
-
-                        $.ajax({
-                            type: 'POST',
-                            url: 'servlet_factura',
-                            data: {
-                                cbCliente: ruc,
-                                txtFecha: fecha,
-                                cbCiudad: ciudad
-                            },
-                            success: function(result){
-                                $('#res').text(result);
-                            }
-                        });
-                    });
-                });
-            </script>-->
         </head>
         <body>
             <script>
@@ -65,8 +42,36 @@
                          i++;
                       });
                 }
-
+                <%
+                    Cliente c = new Cliente();
+                    CiudadEntrega ce = new CiudadEntrega();
+                    java.util.Date d = new java.util.Date();
+                    String fd="";
+                    String nFc="";
+                    if(request.getAttribute("rucAtr")!= null && 
+                            request.getAttribute("cAtr")!=null && 
+                            request.getAttribute("fAtr") !=null &&
+                            request.getAttribute("nFac") != null){
+                        
+                        c = (Cliente)request.getAttribute("rucAtr");
+                        ce = (CiudadEntrega)request.getAttribute("cAtr");
+                        nFc = (String)request.getAttribute("nFac");
+                        DateFormat dFor = new SimpleDateFormat("yyyy-MM-dd");
+                        d = (java.util.Date)request.getAttribute("fAtr");
+                        fd = dFor.format(d);
+                    }
+                    else{
+                        d = Calendar.getInstance().getTime();
+                        DateFormat dFor = new SimpleDateFormat("yyyy-MM-dd");
+                        fd = dFor.format(d);
+                    }
+                    
+                %>
                 $(document).ready(function(){
+                    $('#cbCliente option[value ="'+<%=c.getCliRuc()%>+'"]').attr("selected","selected");
+                    $('#cbCiudad option[value ="'+<%=ce.getCiuCodigo()%>+'"]').attr("selected","selected");
+                    $('#txtFecha').val('<%=fd%>');
+                    $('#numFac').val('<%=nFc%>');
                     $('#agregarFila').click(function(){
                         var anum=$('#aTabla tr').length;
                         trow=  "<tr><td class='aNo'>"+anum+"</td>"+
@@ -106,7 +111,7 @@
                             Número:
                         </td>
                         <td>
-                            <input type="text" name="numFac">
+                            <input type="text" id="numFac" name="numFac">
                         </td>
                     </tr>
                     <tr>
@@ -137,7 +142,7 @@
                             java.util.Date hoy = Calendar.getInstance().getTime();
                             String fecha = dFormat.format(hoy);
                         %>
-                        <input type="date" name="txtFecha" value="<%= fecha%>"/>
+                        <input type="date" id="txtFecha" name="txtFecha" value="<%= fecha%>"/>
                         </td>
                     </tr>
                     <tr>
@@ -173,14 +178,18 @@
                 </table>
                 <br>
                 <input type='submit' value='Insertar' name='boton'>
-                <input type='submit' value='Eliminar' name='boton'>
+                <input type='submit' value='Eliminar Factura' name='boton'>
                 <input type='submit' value='Modificar Factura' name='boton'>
                 <input type='submit' value='Buscar Factura' name='boton'>
-                <input type="reset" value="Cancelar">
                 <input type="submit" name="boton" value="Regresar">
                 <br><br>
                 <input type='submit' value='Modificar Articulos' name='boton'>
-                
+                <% String msj= String.valueOf(request.getAttribute("msj"));
+                System.out.println("1. "+msj);
+                if(msj != "null"){
+                %>
+                    <script>alert('<%=msj%>');</script>
+                <%}%>
             </form>
         </body>
     </html>

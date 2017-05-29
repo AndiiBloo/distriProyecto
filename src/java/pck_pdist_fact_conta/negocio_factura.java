@@ -32,9 +32,11 @@ public class negocio_factura {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
+        }finally{
+            em1.close();
+            factory.close();
         }
-        em1.close();
-        factory.close();
+
         return ok;
     }
     
@@ -50,11 +52,12 @@ public class negocio_factura {
             em1.getTransaction().commit();
             ok = 1;
         }catch (Exception ex){
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             ok = 0;
+        }finally{
+            em1.close();
+            factory.close();
         }
-        em1.close();
-        factory.close();
         return ok;
     }
     
@@ -77,14 +80,15 @@ public class negocio_factura {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
-        } 
-        em1.close();
-        factory.close();
+        }finally{
+            em1.close();
+            factory.close();
+        }
         return ok;
     }
      
-    public List<String> buscar(BigDecimal codigo){
-        List<String> datos = new ArrayList<>();
+    public List<Object> buscar(BigDecimal codigo){
+        List<Object> datos = new ArrayList<>();
         CiudadEntrega codigoC;
         Cliente rucCl;
         Date fecha;
@@ -97,16 +101,18 @@ public class negocio_factura {
             codigoC = c1.getCiuCodigo();
             rucCl = c1.getCliRuc();
             fecha = c1.getFacFecha();
-            datos.add(codigoC.getCiuNombre());
-            datos.add(rucCl.getCliNombre());
-            datos.add(fecha.toString());
+            datos.add(codigoC);
+            datos.add(rucCl);
+            datos.add(fecha);
         }catch (Exception ex){
             System.out.println(ex.getMessage());
-
-            datos = new ArrayList<>();
+            datos.add(null);
+            datos.add(null);
+            datos.add(null);
+        }finally{
+            em1.close();
+            factory.close();
         }
-        em1.close();
-        factory.close();
         return datos;
     }
     
@@ -116,7 +122,8 @@ public class negocio_factura {
         BigDecimal aux = (BigDecimal) em1.createNamedQuery("Factura.maxFacNumero", BigDecimal.class).getSingleResult();
         pck_pdist_fact_conta.entidades.Factura fac = 
                 new pck_pdist_fact_conta.entidades.Factura(aux.add(BigDecimal.ONE));
-        System.out.println(fac.toString());
+        em1.close();
+        factory.close();
         return fac;
     }
 }

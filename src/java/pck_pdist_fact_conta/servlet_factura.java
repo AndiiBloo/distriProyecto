@@ -37,23 +37,25 @@ public class servlet_factura extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String pantalla="";
+        String boton = "";
+        boton=request.getParameter("boton");
+        
         PrintWriter out = response.getWriter();
         String numFac = "";
         numFac = request.getParameter("numFac");
         Factura numFact = new Factura();
+        System.out.println("F"+numFac);
         try{
             numFact = new Factura(new BigDecimal(numFac));
         }catch(Exception ex){
             System.out.println(ex.getMessage());
         }
         
-        String boton = "";
-        boton=request.getParameter("boton");
+        
         String f = "";
         f = request.getParameter("txtFecha");
-        System.out.println(f);
-        String ruc = "";
-        ruc = request.getParameter("cbCliente");
+        System.out.println("fec"+f);
+        
         Date fecha = new Date();
         if(f != null){
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -73,6 +75,9 @@ public class servlet_factura extends HttpServlet {
         else{
             ciu = new pck_pdist_fact_conta.entidades.CiudadEntrega();
         }
+        
+        String ruc = "";
+        ruc = request.getParameter("cbCliente");
         pck_pdist_fact_conta.entidades.Cliente cli;
         if(ruc!=null){
             cli = new pck_pdist_fact_conta.entidades.Cliente(ruc);
@@ -100,50 +105,73 @@ public class servlet_factura extends HttpServlet {
         
         if(boton!=null && boton!=""){
             if(boton.equals("Insertar")){
-                nfac.insertar(ciu,cli,fecha);
-                for(int i=0;i<nomArticulo.length;i++){
-                    nart.insertar(numFInsertar, nomArticulo[i], pArticulo[i], new BigInteger(cantArticulo[i]));
-                }
-                response.sendRedirect("servlet_menu");
-            }
-            
-            if(boton.equals("Eliminar")){
-                if(nfac.eliminar(new BigDecimal(numFac)) == 1){
-                    for(pck_pdist_fact_conta.entidades.Articulos a:nart.mostrarArticulos(numFact)){
-                        nart.eliminar(a.getArtCodigo());
-                    }                
-                    out.println("<script> alert('Factura eliminada'); </script>");
+                if(nfac.insertar(ciu,cli,fecha)==1){
+                    for(int i=0;i<nomArticulo.length;i++){
+                        nart.insertar(numFInsertar, nomArticulo[i], pArticulo[i], new BigInteger(cantArticulo[i]));
+                    }
+                    request.setAttribute("msj", "Inserción correcta");
                     request.getRequestDispatcher("web_factura.jsp").forward(request, response);
                 }
                 else{
+                    request.setAttribute("msj", "Error al insertar");
                     request.getRequestDispatcher("web_factura.jsp").forward(request, response);
-                    out.println("<script> alert('No existe la factura'); </script>");
+                }
+            }
+            
+            if(boton.equals("Eliminar Factura")){
+                if(nfac.eliminar(new BigDecimal(numFac)) == 1){
+                    for(pck_pdist_fact_conta.entidades.Articulos a:nart.mostrarArticulos(numFact)){
+                        nart.eliminar(a.getArtCodigo());
+                    }            
+                    request.setAttribute("msj", "Factura eliminada");
+                    request.getRequestDispatcher("web_factura.jsp").forward(request, response);
+                }
+                else{
+                    request.setAttribute("msj", "Error al eliminar la factura");
+                    request.getRequestDispatcher("web_factura.jsp").forward(request, response);
                 }
             }
                 
-             /*   if(boton.equals("Modificar Factura")){
-                    if (ncli.modificar(ruc, nombre,direccion)==1)
-                        msj = "Se modificó";
-                    else
-                        msj = "No se pudo modificar";
-                    pantalla = mostrar_pantalla("","","");
-                    pantalla+=msj;
+            if(boton.equals("Modificar Factura")){
+                if(nfac.modificar(new BigDecimal(numFac), ciu, cli, fecha) == 1){
+                    request.setAttribute("msj", "Factura modificada");
+                    request.getRequestDispatcher("web_factura.jsp").forward(request, response);
                 }
-            */
+                else{
+                    request.setAttribute("msj", "Error al modificar la factura");
+                    request.getRequestDispatcher("web_factura.jsp").forward(request, response);
+                }
+            }
             if(boton.equals("Modificar Articulos")){
                 pantalla = desplegar_pantalla(numFac,nart.mostrarArticulos(numFact));
             }
-             /*
-                if(boton.equals("Buscar")){  
-                    nombre = ncli.buscar(ruc).get(0);
-                    direccion = ncli.buscar(ruc).get(1);
-                    if(nombre!=null && direccion!=null)
-                        msj="Se encontró";
-                    else
-                        msj="No se encontró";               
-                    pantalla = mostrar_pantalla(ruc,nombre,direccion);                  
-                    pantalla+=msj;
-                }*/
+            if(boton.equals("Modificar Articulo")){
+                String nFactura = String.valueOf(request.getAttribute("nFactura"));
+                System.out.println("mod"+nFactura);
+                Factura nFc = new Factura(new BigDecimal(nFactura));
+                pantalla = desplegar_pantalla(nFactura, nart.mostrarArticulos(nFc));
+            }
+            if(boton.equals("Buscar Factura")){
+                
+                pck_pdist_fact_conta.entidades.CiudadEntrega  cAtr = 
+                        (pck_pdist_fact_conta.entidades.CiudadEntrega)nfac.buscar(new BigDecimal(numFac)).get(0);
+                pck_pdist_fact_conta.entidades.Cliente rucAtr =
+                         (pck_pdist_fact_conta.entidades.Cliente) nfac.buscar(new BigDecimal(numFac)).get(1);
+                Date fAtr = (Date)nfac.buscar(new BigDecimal(numFac)).get(2);
+                
+                if(cAtr != null && rucAtr != null && fAtr != null){
+                    request.setAttribute("nFac", numFac);
+                    request.setAttribute("cAtr", cAtr);
+                    request.setAttribute("rucAtr", rucAtr);
+                    request.setAttribute("fAtr", fAtr);
+                    request.getRequestDispatcher("web_factura.jsp").forward(request, response);
+                }
+                else{
+                    request.setAttribute("msj", "No existe la factura");
+                    request.getRequestDispatcher("web_factura.jsp").forward(request, response);
+                }
+            }
+            
             if(boton.equals("Regresar")){
                 response.sendRedirect("servlet_menu");
             }
@@ -161,8 +189,9 @@ public class servlet_factura extends HttpServlet {
         pantalla+="</head>";
         pantalla+="<body>";
         pantalla+="<h2>Tablas Simples - Cliente</h2>";
-        pantalla+="<form action='servlet_factura' method='post'>";
-        pantalla+="Factura: "+as_factura;
+        pantalla+="<form action='servlet_factura' method='get'>";
+        pantalla+="Número Factura: "+as_factura;
+        pantalla+="<input type='hidden' name='nFactura' value='"+as_factura+"'>";
         pantalla+="<br><br>";
         pantalla+="<h2>Artículos</h2>";
         pantalla+="<table>";

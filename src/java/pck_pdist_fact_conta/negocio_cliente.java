@@ -26,9 +26,10 @@ public class negocio_cliente {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
+        }finally{
+            em1.close();
+            factory.close();
         }
-        em1.close();
-        factory.close();
         return ok;
     }
     
@@ -46,9 +47,10 @@ public class negocio_cliente {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
+        }finally{
+            em1.close();
+            factory.close();
         }
-        em1.close();
-        factory.close();
         return ok;
     }
     
@@ -69,9 +71,10 @@ public class negocio_cliente {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
-        } 
-        em1.close();
-        factory.close();
+        }finally{
+            em1.close();
+            factory.close();
+        }
         return ok;
     }
      
@@ -95,9 +98,10 @@ public class negocio_cliente {
             direccion = null;
             datos.add(nombre);
             datos.add(direccion);
-        } 
-        em1.close();
-        factory.close();
+        }finally{
+            em1.close();
+            factory.close();
+        }
         return datos;
     }
     
@@ -111,6 +115,9 @@ public class negocio_cliente {
             listClientes = em1.createNamedQuery("Cliente.findAll",Cliente.class).getResultList();
         }catch(Exception ex){
             System.out.println(ex.getMessage());
+        }finally{
+            em1.close();
+            factory.close();
         }
         return listClientes;
     }  

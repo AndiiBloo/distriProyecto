@@ -31,9 +31,10 @@ class negocio_usuario {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             ok = 0;
-        } 
-        em1.close();
-        factory.close();
+        }finally{
+            em1.close();
+            factory.close();
+        }
         return null;
      }
 }
