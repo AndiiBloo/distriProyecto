@@ -75,6 +75,11 @@
                             "<td><input name='aPrecio' type='text'></td>"+
                            "<td><button type='button' class='quitar'>Quitar</button></td></tr>";
                         $('#aTabla').append(trow);
+                        $('#num').show();
+                        $('#art').show();
+                        $('#cant').show();
+                        $('#prec').show();
+                        $('#elim').show();
                     });
                 });
 
@@ -159,21 +164,23 @@
                 <input id="agregarFila" type="button" value="Agregar Fila">
                 <table id="aTabla">
                     <tr>
-                        <td>N°</td>
-                        <td>Artículo</td>
-                        <td>Cantidad</td>
-                        <td>Precio</td>
-                        <td>Eliminar</td>
+                        <td hidden="true" id="num">N°</td>
+                        <td hidden="true" id="art">Artículo</td>
+                        <td hidden="true" id="cant">Cantidad</td>
+                        <td hidden="true" id="prec">Precio</td>
+                        <td hidden="true" id="elim">Eliminar</td>
                     </tr>
                 </table>
                 <br>
                 <input type='submit' value='Insertar' name='boton'>
-                <input type='submit' value='Eliminar' name='boton' >
-                <input type='submit' value='Modificar' name='boton'>
-                <input type='submit' value='Buscar' name='boton'> 
-                <input type='submit' value='Regresar' name='boton'>
+                <input type='submit' value='Eliminar' name='boton'>
+                <input type='submit' value='Modificar Factura' name='boton'>
+                <input type='submit' value='Buscar Factura' name='boton'>
                 <input type="reset" value="Cancelar">
                 <input type="submit" name="boton" value="Regresar">
+                <br><br>
+                <input type='submit' value='Modificar Articulos' name='boton'>
+                
             </form>
         </body>
     </html>

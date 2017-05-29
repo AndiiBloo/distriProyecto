@@ -16,8 +16,9 @@ public class negocio_factura {
     public int insertar(CiudadEntrega codigoC, Cliente rucCl, Date fecha){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
         EntityManager em1 = factory.createEntityManager();
-        pck_pdist_fact_conta.entidades.Factura c1 = new pck_pdist_fact_conta.entidades.Factura();                  
-        c1.setFacNumero(BigDecimal.ZERO);
+        pck_pdist_fact_conta.entidades.Factura c1 = new pck_pdist_fact_conta.entidades.Factura();
+        BigDecimal aux = (BigDecimal) em1.createNamedQuery("Factura.maxFacNumero", BigDecimal.class).getSingleResult();
+        c1.setFacNumero(aux.add(BigDecimal.ONE));
         c1.setCiuCodigo(codigoC);
         c1.setCliRuc(rucCl);
         c1.setFacFecha(fecha);
@@ -112,7 +113,7 @@ public class negocio_factura {
     public Factura obtenerNum(){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
         EntityManager em1 = factory.createEntityManager();
-        BigDecimal aux = (BigDecimal) em1.createNamedQuery("Factura.maxFacNumero");
+        BigDecimal aux = (BigDecimal) em1.createNamedQuery("Factura.maxFacNumero", BigDecimal.class).getSingleResult();
         pck_pdist_fact_conta.entidades.Factura fac = 
                 new pck_pdist_fact_conta.entidades.Factura(aux.add(BigDecimal.ONE));
         System.out.println(fac.toString());
