@@ -98,6 +98,14 @@
                 <table>
                     <tr>
                         <td style="font-weight: bold;">
+                            Número:
+                        </td>
+                        <td>
+                            <input type="text" name="numFac">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">
                             Ruc:
                         </td>
                         <td>
@@ -159,7 +167,11 @@
                     </tr>
                 </table>
                 <br>
-                <input type="submit" name="boton" value="Enviar">
+                <input type='submit' value='Insertar' name='boton'>
+                <input type='submit' value='Eliminar' name='boton' >
+                <input type='submit' value='Modificar' name='boton'>
+                <input type='submit' value='Buscar' name='boton'> 
+                <input type='submit' value='Regresar' name='boton'>
                 <input type="reset" value="Cancelar">
                 <input type="submit" name="boton" value="Regresar">
             </form>

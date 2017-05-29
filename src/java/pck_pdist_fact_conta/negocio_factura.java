@@ -108,4 +108,14 @@ public class negocio_factura {
         factory.close();
         return datos;
     }
+    
+    public Factura obtenerNum(){
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
+        EntityManager em1 = factory.createEntityManager();
+        BigDecimal aux = (BigDecimal) em1.createNamedQuery("Factura.maxFacNumero");
+        pck_pdist_fact_conta.entidades.Factura fac = 
+                new pck_pdist_fact_conta.entidades.Factura(aux.add(BigDecimal.ONE));
+        System.out.println(fac.toString());
+        return fac;
+    }
 }

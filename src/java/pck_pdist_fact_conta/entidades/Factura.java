@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Factura.findAll", query = "SELECT f FROM Factura f")
     , @NamedQuery(name = "Factura.findByFacNumero", query = "SELECT f FROM Factura f WHERE f.facNumero = :facNumero")
-    , @NamedQuery(name = "Factura.findByFacFecha", query = "SELECT f FROM Factura f WHERE f.facFecha = :facFecha")})
+    , @NamedQuery(name = "Factura.findByFacFecha", query = "SELECT f FROM Factura f WHERE f.facFecha = :facFecha")
+    , @NamedQuery(name = "Factura.maxFacNumero", query = "SELECT COALESCE(MAX(f.facNumero) , 0) FROM Factura f")})
 public class Factura implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -135,7 +136,6 @@ public class Factura implements Serializable {
 
     @Override
     public String toString() {
-        return "pck_pdist_fact_conta.entidades.Factura[ facNumero=" + facNumero + " ]";
-    }
-    
+        return "Factura{" + "facNumero=" + facNumero + ", facFecha=" + facFecha + ", articulosList=" + articulosList + ", ciuCodigo=" + ciuCodigo + ", cliRuc=" + cliRuc + '}';
+    }    
 }

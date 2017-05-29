@@ -82,7 +82,7 @@ public class negocio_articulo {
         return ok;
     }
     
-    public List<Articulos> mostrarArticulos(String facNumero){
+    public List<Articulos> mostrarArticulos(Factura facNumero){
         List<Articulos> listArticulos = new ArrayList<>();
         
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("pdist_fact_contaPU");
